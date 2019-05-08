@@ -3,7 +3,7 @@ package Tecnical_Services;
 
 public class userDTO implements IUserDTO {
 
-        private String	userId;
+        private int	userId;
         private String userName;
         private String password;
         private String role;
@@ -18,12 +18,12 @@ public class userDTO implements IUserDTO {
         }
 
     @Override
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
     @Override
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

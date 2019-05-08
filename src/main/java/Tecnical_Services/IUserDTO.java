@@ -3,9 +3,9 @@ package Tecnical_Services;
 import java.util.List;
 
 public interface IUserDTO {
-    String getUserId();
+    int getUserId();
 
-    void setUserId(String id);
+    void setUserId(int id);
 
     String getUsername();
 
