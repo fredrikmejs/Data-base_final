@@ -4,14 +4,14 @@ import java.util.Date;
 
 public interface IProductionBachDTO {
 
-    int getIdProdBach();
-    void setIdProdBach(int idProdBach);
+    int getIdProdBatch();
+    void setIdProdBatch(int idProdBach);
 
     int getIdRec();
     void setIdRec(int idRecipe);
 
-    int getBachSize();
-    void setBachSize(int bachSize);
+    int getBatchSize();
+    void setBatchSize(int batchSize);
 
     Date getDate();
     void setDate(Date date);
