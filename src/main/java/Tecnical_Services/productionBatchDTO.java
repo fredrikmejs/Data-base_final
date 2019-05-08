@@ -9,7 +9,14 @@ public class productionBatchDTO implements IProductionBachDTO {
     private int batchSize;
     private Date prodBatchDate;
 
+    public productionBatchDTO(int prodBachId, int recipeId, int batchSize, Date prodBatchDate){
 
+        this.prodBachId = prodBachId;
+        this.recipeId = recipeId;
+        this.batchSize = batchSize;
+        this.prodBatchDate = prodBatchDate;
+
+    }
 
     @Override
     public int getIdProdBatch() {
