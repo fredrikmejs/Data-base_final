@@ -16,14 +16,14 @@ public interface IDal {
     boolean deleteRecipe(int id);
 
     //Production Batch
-    boolean addProductionBatch(IProductionBachDTO pBatch);
+    boolean addProductionBatch(IProductionBatchDTO pBatch);
     boolean readProductionBatch(int id);
-    boolean updateProductionBatch(IProductionBachDTO pBatch);
+    boolean updateProductionBatch(IProductionBatchDTO pBatch);
     boolean deleteProductionBatch(int id);
 
     //Comodity Batch
-    boolean addComodityBatch(IComodityBachDTO cBatch);
+    boolean addComodityBatch(IComodityBatchDTO cBatch);
     boolean readComodityBatch(int id);
-    boolean updateComodityBatch(IComodityBachDTO cBatch);
+    boolean updateComodityBatch(IComodityBatchDTO cBatch);
     boolean deleteComodityBatch(int id);
 }
