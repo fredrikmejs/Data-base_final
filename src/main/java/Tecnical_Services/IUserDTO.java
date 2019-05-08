@@ -5,7 +5,7 @@ import java.util.List;
 public interface IUserDTO {
     String getUserId();
 
-    void setUserId(String word);
+    void setUserId(String id);
 
     String getUsername();
 
@@ -15,9 +15,9 @@ public interface IUserDTO {
 
     void setPassword(String password);
 
-    String getRoles();
+    String getRole();
 
-    void setRoles(String role);
+    void setRole(String role);
 
     boolean isAdmin();
 
