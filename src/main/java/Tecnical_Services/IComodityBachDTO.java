@@ -1,6 +1,6 @@
 package Tecnical_Services;
 
-public interface IComodity_bachDTO {
+public interface IComodityBachDTO {
 
     int getidComBach();
     void setIdComBach(int idComBach);
