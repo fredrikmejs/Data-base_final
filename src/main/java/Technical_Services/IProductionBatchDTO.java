@@ -2,10 +2,10 @@ package Technical_Services;
 
 import java.util.Date;
 
-public interface IProductionBachDTO {
+public interface IProductionBatchDTO {
 
     int getIdProdBatch();
-    void setIdProdBatch(int idProdBach);
+    void setIdProdBatch(int idProdBatch);
 
     int getIdRec();
     void setIdRec(int idRecipe);

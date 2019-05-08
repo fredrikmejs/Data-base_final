@@ -3,7 +3,7 @@ package Technical_Services;
 public interface IComodityBatchDTO {
 
     int getIdComBatch();
-    void setIdComBatch(int idComBach);
+    void setIdComBatch(int idComBatch);
 
     int getIdCom();
     void setIdCom(int idCom);

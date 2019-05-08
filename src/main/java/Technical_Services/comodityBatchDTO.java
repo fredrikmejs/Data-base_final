@@ -24,8 +24,8 @@ public class comodityBatchDTO implements IComodityBatchDTO {
     }
 
     @Override
-    public void setIdComBatch(int idComBach) {
-    this.comBatchId = idComBach;
+    public void setIdComBatch(int idComBatch) {
+    this.comBatchId = idComBatch;
     }
 
     @Override

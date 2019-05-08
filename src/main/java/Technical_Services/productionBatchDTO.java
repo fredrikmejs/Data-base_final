@@ -2,16 +2,16 @@ package Technical_Services;
 
 import java.util.Date;
 
-public class productionBatchDTO implements IProductionBachDTO {
+public class productionBatchDTO implements IProductionBatchDTO {
 
-    private int	prodBachId;
+    private int	prodBatchId;
     private int recipeId;
     private int batchSize;
     private Date prodBatchDate;
 
-    public productionBatchDTO(int prodBachId, int recipeId, int batchSize, Date prodBatchDate){
+    public productionBatchDTO(int prodBatchId, int recipeId, int batchSize, Date prodBatchDate){
 
-        this.prodBachId = prodBachId;
+        this.prodBatchId = prodBatchId;
         this.recipeId = recipeId;
         this.batchSize = batchSize;
         this.prodBatchDate = prodBatchDate;
@@ -20,12 +20,12 @@ public class productionBatchDTO implements IProductionBachDTO {
 
     @Override
     public int getIdProdBatch() {
-        return prodBachId;
+        return prodBatchId;
     }
 
     @Override
-    public void setIdProdBatch(int idProdBach) {
-    this.prodBachId = idProdBach;
+    public void setIdProdBatch(int idProdBatch) {
+    this.prodBatchId = idProdBatch;
     }
 
     @Override
