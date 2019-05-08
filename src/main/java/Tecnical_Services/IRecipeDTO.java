@@ -4,17 +4,17 @@ import java.util.Date;
 
 public interface IRecipeDTO {
 
-     int getId();
-     void setId(int id);
+     int getRecipeId();
+     void setRecipeId(int RecipeId);
 
-     Date getDate();
-     void setDate(Date date);
+     Date getRecipeDate();
+     void setRecipeDate(Date RecipeDate);
 
 
-     String getName();
-     void getName(String name);
+     String getRecipeName();
+     void getRecipeName(String RecipeName);
 
-     boolean getIsInUse();
-     void setIsInUse(boolean inUse);
+     boolean getIsRecipeInUse();
+     void setIsRecipeInUse(boolean RecipeinUse);
 
 }
