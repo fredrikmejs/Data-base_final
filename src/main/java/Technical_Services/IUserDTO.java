@@ -1,6 +1,4 @@
-package Tecnical_Services;
-
-import java.util.List;
+package Technical_Services;
 
 public interface IUserDTO {
     String getUserId();

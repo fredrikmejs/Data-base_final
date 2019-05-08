@@ -1,4 +1,4 @@
-package Tecnical_Services;
+package Technical_Services;
 
 
 public class userDTO implements IUserDTO {

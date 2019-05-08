@@ -1,4 +1,4 @@
-package Tecnical_Services;
+package Technical_Services;
 
 public interface IComodityBachDTO {
 
