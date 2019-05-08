@@ -23,8 +23,8 @@ public class recipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void setRecipeId(int recipeid) {
-    this.recipeId = recipeid;
+    public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
     }
 
     @Override
