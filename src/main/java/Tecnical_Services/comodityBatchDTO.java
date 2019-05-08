@@ -8,6 +8,15 @@ public class comodityBatchDTO implements IComodityBatchDTO {
     private boolean isRest;
 
 
+    public comodityBatchDTO(int comBatchId, int comId, float amount, boolean isRest){
+
+        this.comBatchId = comBatchId;
+        this.comId = comId;
+        this.amount = amount;
+        this.isRest = isRest;
+
+
+    }
 
     @Override
     public int getIdComBatch() {
