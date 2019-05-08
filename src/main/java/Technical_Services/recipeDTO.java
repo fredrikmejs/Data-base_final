@@ -4,22 +4,18 @@ import java.util.Date;
 
 public class recipeDTO implements IRecipeDTO {
 
-
     private int	recipeId;
     private Date date;
     private String recipeName;
     private boolean isInUse;
 
-    public recipeDTO(int recipeId, Date date, String recipeName, boolean isInUse) {
+    public recipeDTO(int recipeId, Date date, String recipeName, boolean isInUse){
+
         this.recipeId = recipeId;
         this.date = date;
-        this.isInUse = isInUse;
         this.recipeName = recipeName;
-
+        this.isInUse = isInUse;
     }
-
-
-
 
     @Override
     public int getRecipeId() {
@@ -27,8 +23,8 @@ public class recipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void setRecipeId(int recipeid) {
-    this.recipeId = recipeid;
+    public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
     }
 
     @Override
@@ -37,8 +33,8 @@ public class recipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void setRecipeDate(Date recipeaDate) {
-    this.date = recipeaDate;
+    public void setRecipeDate(Date recipeDate) {
+    this.date = recipeDate;
     }
 
     @Override
@@ -47,7 +43,7 @@ public class recipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void getRecipeName(String RecipeName) {
+    public void getRecipeName(String recipeName) {
     this.recipeName = recipeName;
     }
 

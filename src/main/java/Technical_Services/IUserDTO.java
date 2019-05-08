@@ -1,9 +1,9 @@
 package Technical_Services;
 
 public interface IUserDTO {
-    String getUserId();
+    int getUserId();
 
-    void setUserId(String id);
+    void setUserId(int id);
 
     String getUsername();
 

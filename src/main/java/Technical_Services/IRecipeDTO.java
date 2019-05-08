@@ -15,6 +15,6 @@ public interface IRecipeDTO {
      void getRecipeName(String RecipeName);
 
      boolean getIsRecipeInUse();
-     void setIsRecipeInUse(boolean RecipeinUse);
+     void setIsRecipeInUse(boolean RecipeInUse);
 
 }
