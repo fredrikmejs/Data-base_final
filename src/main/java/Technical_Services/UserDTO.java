@@ -1,7 +1,7 @@
 package Technical_Services;
 
 
-public class userDTO implements IUserDTO {
+public class UserDTO implements IUserDTO {
 
         private int	userId;
         private String userName;
@@ -9,7 +9,7 @@ public class userDTO implements IUserDTO {
         private String role;
         private boolean isAdmin;
 
-        public userDTO(String userName, String password, String role, boolean isAdmin) {
+        public UserDTO(String userName, String password, String role, boolean isAdmin) {
             this.userName = userName;
             this.password = password;
             this.isAdmin = isAdmin;

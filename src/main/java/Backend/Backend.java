@@ -1,14 +1,8 @@
 package Backend;
 
-import Technical_Services.ICommodityBatchDTO;
-import Technical_Services.IProductionBatchDTO;
-import Technical_Services.IRecipeDTO;
-import Technical_Services.IUserDTO;
+import Technical_Services.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Backend implements IDal {
 
@@ -29,6 +23,7 @@ public class Backend implements IDal {
     //User
     @Override
     public boolean addUser(IUserDTO user) throws SQLException {
+        con.setAutoCommit(true);
         String query = "INSERT INTO user(id_user, userName, " +
                 "userPass, jobTitle, isAdmin) " +
                 "VALUES(?, ?, ?, ?, ?)";
@@ -42,16 +37,21 @@ public class Backend implements IDal {
         return success;
     }
     @Override
-    public boolean readUser(int id) throws SQLException {
-        String query = "SELECT* Where user_id = ?";
+    public UserDTO readUser(int id) throws SQLException {
+        con.setAutoCommit(true);
+        String query = "SELECT * Where user_id = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
-        psQuery.setInt(1,id);
-        boolean success = psQuery.execute();
-        return success;
+        psQuery.setInt(1, id);
+
+        ResultSet r = psQuery.executeQuery();
+        r.next();
+        return new UserDTO(r.getString("username"), r.getString("password"),
+                r.getString("job_title"), r.getBoolean("is_in_use"));
     }
 
     @Override
     public boolean updateUser(IUserDTO user) throws SQLException {
+        con.setAutoCommit(true);
         String query = "UPDATE user" +
                 "SET userName = ?, userPass = ?, jobTitle = ?," +
                 " isAdmin = ? " + "WHERE id_user = ?";
@@ -68,6 +68,7 @@ public class Backend implements IDal {
 
     @Override
     public boolean deleteUser(int id) throws SQLException {
+        con.setAutoCommit(true);
         String query = "DELETE FROM user " +
                 "WHERE id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
@@ -81,27 +82,51 @@ public class Backend implements IDal {
 
     @Override
     public boolean addRecipe(IRecipeDTO recipe) throws SQLException {
-    //TODO maybe change the query
-        String query = "INSERT INTO recipe(id_user, recipeName" +
-                "date, isINUse ) " +
-                "VALUES(?, ?, ?, ?)";
-        PreparedStatement psQuery = con.prepareStatement(query);
-        psQuery.setInt(1, recipe.getRecipeId());
-        psQuery.setString(2, recipe.getRecipeName());
-        psQuery.setObject(3, recipe.getRecipeDate());
-        psQuery.setBoolean(4, recipe.getIsRecipeInUse());
-        boolean success = psQuery.execute();
-        return success;
+        try {
+            con.setAutoCommit(false); //starts a transaction
+            boolean success;
+
+            //set the recipe
+            String query1 = "INSERT INTO recipe(id_recipe, recipeName, " +
+                    "date, is_in_use ) " +
+                    "VALUES(?, ?, ?, ?)";
+            PreparedStatement prepStatement1 = con.prepareStatement(query1);
+            prepStatement1.setInt(1, recipe.getRecipeId());
+            prepStatement1.setString(2, recipe.getRecipeName());
+            prepStatement1.setObject(3, recipe.getRecipeDate());
+            prepStatement1.setBoolean(4, recipe.getIsRecipeInUse());
+            success = prepStatement1.execute();
+            prepStatement1.close();
+            if (!success) throw new SQLException();
+
+            //set all the ingredients
+            String query2 = "INSERT INTO ingredient(id_recipe, id_com, amount, timestamp) " +
+                    "VALUES(?, ?, ?, ?)";
+            PreparedStatement prepStatement2 = con.prepareStatement(query2);
+            for (IIngredientDTO i : recipe.getIngredients()) {
+                prepStatement2.setInt(1, recipe.getRecipeId());
+                prepStatement2.setInt(2, i.getComodityId());
+                prepStatement2.setDouble(3, i.getAmount());
+                prepStatement2.setDate(4, recipe.getRecipeDate());
+                success = prepStatement2.execute();
+                prepStatement2.clearParameters();
+                if (!success) throw new SQLException();
+            }
+            prepStatement2.close();
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            con.rollback();
+            return false;
+        }
     }
 
     @Override
-    public boolean readRecipe(int id) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "SELECT* Where recipe_id = ?";
+    public RecipeDTO readRecipe(int id) throws SQLException {
+        //TODO figure out how to write this query
+        String query = "SELECT id_recipe, recipeName, date, is_in_use, id_com, name, amount FROM recipe JOIN   Where recipe_id = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1,id);
-        boolean success = psQuery.execute();
-        return success;
     }
 
     @Override

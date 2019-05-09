@@ -2,7 +2,7 @@ package Technical_Services;
 
 import java.sql.Date;
 
-public class commodityBatchDTO implements ICommodityBatchDTO {
+public class CommodityBatchDTO implements ICommodityBatchDTO {
 
     private int	comBatchId;
     private int comId;
@@ -11,7 +11,7 @@ public class commodityBatchDTO implements ICommodityBatchDTO {
     private Date date;
 
 
-    public commodityBatchDTO(int comBatchId, int comId, float amount, Date date, boolean isRest){
+    public CommodityBatchDTO(int comBatchId, int comId, float amount, Date date, boolean isRest){
 
         this.comBatchId = comBatchId;
         this.comId = comId;

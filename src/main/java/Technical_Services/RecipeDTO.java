@@ -1,15 +1,16 @@
 package Technical_Services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
-public class recipeDTO implements IRecipeDTO {
+public class RecipeDTO implements IRecipeDTO {
 
     private int	recipeId;
     private Date date;
     private String recipeName;
     private boolean isInUse;
 
-    public recipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
+    public RecipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
 
         this.recipeId = recipeId;
         this.date = date;
