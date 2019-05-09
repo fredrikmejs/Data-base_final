@@ -146,9 +146,14 @@ public class Backend implements IDal {
     }
 
     @Override
-    public boolean readProductionBatch(int id) {
+    public boolean readProductionBatch(int id) throws SQLException {
+        String query ="SELECT * FROM production_batch" +
+                "WHERE id_production_batch = ?";
 
-        return false;
+        PreparedStatement psQuery = con.prepareStatement(query);
+        psQuery.setInt(1, id);
+        boolean success = psQuery.execute();
+        return success;
     }
 
     @Override
