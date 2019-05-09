@@ -1,13 +1,16 @@
 package Backend;
 import Technical_Services.*;
+
+import java.sql.SQLException;
+
 public interface IDal {
     //CRUD for each
 
     //User
-    boolean addUser(IUserDTO user);
-    boolean readUser(int id);
-    boolean updateUser(IUserDTO user);
-    boolean deleteUser(int id);
+    boolean addUser(IUserDTO user) throws SQLException;
+    boolean readUser(int id) throws SQLException;
+    boolean updateUser(IUserDTO user) throws SQLException;
+    boolean deleteUser(int id) throws SQLException;
 
     //Recipe
     boolean addRecipe(IRecipeDTO recipe);
