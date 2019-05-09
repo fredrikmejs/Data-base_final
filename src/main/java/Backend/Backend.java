@@ -178,6 +178,7 @@ public class Backend implements IDal {
 
     @Override
     public boolean deleteComodityBatch(int id) throws SQLException {
+        //TODO Maybe change to Query
         String query = "DELETE FROM comodityBatch" +
                 "WHERE id_recipe = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
