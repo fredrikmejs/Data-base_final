@@ -1,20 +1,23 @@
 package Technical_Services;
 
+import java.util.Date;
+
 public class comodityBatchDTO implements IComodityBatchDTO {
 
     private int	comBatchId;
     private int comId;
     private float amount;
     private boolean isRest;
+    private Date date;
 
 
-    public comodityBatchDTO(int comBatchId, int comId, float amount, boolean isRest){
+    public comodityBatchDTO(int comBatchId, int comId, float amount,Date date, boolean isRest){
 
         this.comBatchId = comBatchId;
         this.comId = comId;
         this.amount = amount;
         this.isRest = isRest;
-
+        this.date = date;
 
     }
 
@@ -57,4 +60,15 @@ public class comodityBatchDTO implements IComodityBatchDTO {
     public void setRest(boolean rest) {
     this.isRest = rest;
     }
+
+    @Override
+    public Date getCommodityBatchDate(){ return date;}
+
+    @Override
+    public void setCommodityBatchDate(Date commodityBatchDate){
+        this.date = commodityBatchDate;
+}
+
+
+
 }

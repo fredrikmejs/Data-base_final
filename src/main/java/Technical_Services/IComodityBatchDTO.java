@@ -1,5 +1,7 @@
 package Technical_Services;
 
+import java.util.Date;
+
 public interface IComodityBatchDTO {
 
     int getIdComBatch();
@@ -13,4 +15,7 @@ public interface IComodityBatchDTO {
 
     Boolean getRest();
     void setRest(boolean rest);
+
+    Date getCommodityBatchDate();
+    void setCommodityBatchDate(Date commodityBatchDate);
 }
