@@ -132,23 +132,31 @@ public class Backend implements IDal {
 
     //Production Batch
     @Override
-    public boolean addProductionBatch(IProductionBatchDTO pBatch) {
+    public boolean addProductionBatch(IProductionBatchDTO pBatch) throws SQLException {
         return false;
     }
 
     @Override
     public boolean readProductionBatch(int id) {
+
         return false;
     }
 
     @Override
     public boolean updateProductionBatch(IProductionBatchDTO pBatch) {
+
         return false;
     }
 
     @Override
-    public boolean deleteProductionBatch(int id) {
-        return false;
+    public boolean deleteProductionBatch(int id) throws SQLException {
+        //TODO Maybe change to Query
+        String query = "DELETE FROM productionBatch" +
+                "WHERE id_recipe = ?";
+        PreparedStatement psQuery = con.prepareStatement(query);
+        psQuery.setInt(1, id);
+        boolean success = psQuery.execute();
+        return success;
     }
 
 
@@ -169,7 +177,12 @@ public class Backend implements IDal {
     }
 
     @Override
-    public boolean deleteComodityBatch(int id) {
-        return false;
+    public boolean deleteComodityBatch(int id) throws SQLException {
+        String query = "DELETE FROM comodityBatch" +
+                "WHERE id_recipe = ?";
+        PreparedStatement psQuery = con.prepareStatement(query);
+        psQuery.setInt(1, id);
+        boolean success = psQuery.execute();
+        return success;
     }
 }

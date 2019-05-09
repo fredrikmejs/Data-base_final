@@ -19,14 +19,14 @@ public interface IDal {
     boolean deleteRecipe(int id) throws SQLException;
 
     //Production Batch
-    boolean addProductionBatch(IProductionBatchDTO pBatch);
+    boolean addProductionBatch(IProductionBatchDTO pBatch) throws SQLException;
     boolean readProductionBatch(int id);
     boolean updateProductionBatch(IProductionBatchDTO pBatch);
-    boolean deleteProductionBatch(int id);
+    boolean deleteProductionBatch(int id) throws SQLException;
 
     //Comodity Batch
     boolean addComodityBatch(IComodityBatchDTO cBatch);
     boolean readComodityBatch(int id);
     boolean updateComodityBatch(IComodityBatchDTO cBatch);
-    boolean deleteComodityBatch(int id);
+    boolean deleteComodityBatch(int id) throws SQLException;
 }
