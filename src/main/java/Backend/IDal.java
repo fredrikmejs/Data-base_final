@@ -13,10 +13,10 @@ public interface IDal {
     boolean deleteUser(int id) throws SQLException;
 
     //Recipe
-    boolean addRecipe(IRecipeDTO recipe);
-    boolean readRecipe(int id);
-    boolean updateRecipe(IRecipeDTO recipe);
-    boolean deleteRecipe(int id);
+    boolean addRecipe(IRecipeDTO recipe) throws SQLException;
+    boolean readRecipe(int id) throws SQLException;
+    boolean updateRecipe(IRecipeDTO recipe) throws SQLException;
+    boolean deleteRecipe(int id) throws SQLException;
 
     //Production Batch
     boolean addProductionBatch(IProductionBatchDTO pBatch);

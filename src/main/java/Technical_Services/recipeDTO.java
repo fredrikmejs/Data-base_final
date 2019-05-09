@@ -9,7 +9,7 @@ public class recipeDTO implements IRecipeDTO {
     private String recipeName;
     private boolean isInUse;
 
-    public recipeDTO(int recipeId, Date date, String recipeName, boolean isInUse){
+    public recipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
 
         this.recipeId = recipeId;
         this.date = date;
