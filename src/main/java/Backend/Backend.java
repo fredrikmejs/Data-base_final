@@ -22,6 +22,7 @@ public class Backend implements IDal {
         con.close();
     }
 
+
     //User
     @Override
     public boolean addUser(IUserDTO user) throws SQLException {
