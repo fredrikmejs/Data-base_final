@@ -21,7 +21,7 @@ public interface IDal {
     //Production Batch
     boolean addProductionBatch(IProductionBatchDTO pBatch) throws SQLException;
     boolean readProductionBatch(int id);
-    boolean updateProductionBatch(IProductionBatchDTO pBatch);
+    boolean updateProductionBatch(IProductionBatchDTO pBatch) throws SQLException;
     boolean deleteProductionBatch(int id) throws SQLException;
 
     //Comodity Batch
