@@ -2,7 +2,7 @@ package Technical_Services;
 
 import java.sql.Date;
 
-public interface IComodityBatchDTO {
+public interface ICommodityBatchDTO {
 
     int getIdComBatch();
     void setIdComBatch(int idComBatch);
