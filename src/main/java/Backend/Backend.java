@@ -11,7 +11,7 @@ public class Backend implements IDal {
     private static Connection con;
 
     public void createConnection() throws SQLException {
-        con = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/chbu?"
+        con = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185140?"
                 + "user=s185140&password=YKl6EOAgNqhvE0fjJ0uJX");
     }
     public void closeConnection() throws SQLException {
@@ -24,8 +24,8 @@ public class Backend implements IDal {
     public boolean addUser(IUserDTO user) throws SQLException {
         createConnection();
         con.setAutoCommit(true);
-        String query = "INSERT INTO user(id_user, userName, " +
-                "userPass, jobTitle, isAdmin) " +
+        String query = "INSERT INTO user(id_user, username, " +
+                "password, job_title, admin) " +
                 "VALUES(?, ?, ?, ?, ?)";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, user.getUserId());
@@ -41,15 +41,16 @@ public class Backend implements IDal {
     public IUserDTO readUser(int id) throws SQLException {
         createConnection();
         con.setAutoCommit(true);
-        String query = "SELECT * Where user_id = ?";
+        String query = "SELECT * FROM user Where id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
 
         ResultSet r = psQuery.executeQuery();
         r.next();
+        IUserDTO user = new UserDTO(r.getString("username"), r.getString("password"),
+                r.getString("job_title"), r.getBoolean("admin"));
         closeConnection();
-        return new UserDTO(r.getString("username"), r.getString("password"),
-                r.getString("job_title"), r.getBoolean("is_in_use"));
+        return user;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class Backend implements IDal {
         createConnection();
         con.setAutoCommit(true);
         String query = "UPDATE user " +
-                "SET userName = ?, userPass = ?, jobTitle = ?, isAdmin = ? " +
+                "SET username = ?, password = ?, job_title = ?, admin = ? " +
                 "WHERE id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setString(1, user.getUsername());
@@ -113,7 +114,7 @@ public class Backend implements IDal {
             boolean success;
 
             //set the recipe
-            String query1 = "INSERT INTO recipe(id_recipe, recipeName, " +
+i            String query1 = "INSERT INTO recipe(id_recipe, name, " +
                     "date, is_in_use ) " +
                     "VALUES(?, ?, ?, ?)";
             PreparedStatement prepStatement1 = con.prepareStatement(query1);
@@ -284,11 +285,12 @@ public class Backend implements IDal {
     public boolean updateProductionBatch(IProductionBatchDTO pBatch) throws SQLException {
         createConnection();
         String query = "UPDATE production_batch " +
-                "SET batch_size = ?, time_stamp = ?, " +
+                "SET batch_size = ?, time_stamp = ? " +
                 "WHERE id_production_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, pBatch.getBatchSize());
         psQuery.setDate(2, pBatch.getDate());
+        psQuery.setInt(3, pBatch.getIdProdBatch());
         boolean success = psQuery.execute();
         closeConnection();
         return success;
@@ -297,7 +299,7 @@ public class Backend implements IDal {
     @Override
     public boolean deleteProductionBatch(int id) throws SQLException {
         createConnection();
-        String query = "DELETE FROM productionBatch " +
+        String query = "DELETE FROM production_batch " +
                 "WHERE id_production_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
@@ -316,7 +318,7 @@ public class Backend implements IDal {
     public boolean addCommodityBatch(ICommodityBatchDTO cBatch) throws SQLException {
         createConnection();
         String query = "INSERT INTO commodity_batch" +
-                "(id_com_batch, id_com, amount, isRest, time_stamp) " +
+                "(id_com_batch, id_com, amount, is_remainder, time_stamp) " +
                 "VALUES(?, ?, ?, ?,?)";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, cBatch.getIdComBatch());
@@ -337,6 +339,7 @@ public class Backend implements IDal {
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
         ResultSet rs = psQuery.executeQuery();
+        rs.next();
         ICommodityBatchDTO batch = new CommodityBatchDTO(
                 rs.getInt("id_com_batch"),
                 rs.getInt("id_com"),
@@ -355,7 +358,7 @@ public class Backend implements IDal {
     public boolean updateCommodityBatch(ICommodityBatchDTO cBatch) throws SQLException {
         createConnection();
         String query = "UPDATE commodity_batch " +
-                "SET amount = ?, isRest= ?, " +
+                "SET amount = ?, is_remainder = ?, " +
                 "time_stamp= ? " +
                 "WHERE id_com_batch = ?";
 
@@ -373,8 +376,8 @@ public class Backend implements IDal {
     @Override
     public boolean deleteCommodityBatch(int id) throws SQLException {
         createConnection();
-        String query = "DELETE FROM commodityBatch " +
-                "WHERE id_recipe = ?";
+        String query = "DELETE FROM commodity_batch " +
+                "WHERE id_com_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
         boolean success = psQuery.execute();
