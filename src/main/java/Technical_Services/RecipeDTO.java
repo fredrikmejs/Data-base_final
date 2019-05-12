@@ -1,21 +1,24 @@
 package Technical_Services;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
 
-public class recipeDTO implements IRecipeDTO {
+public class RecipeDTO implements IRecipeDTO {
 
     private int	recipeId;
     private Date date;
     private String recipeName;
     private boolean isInUse;
+    private List<IIngredientDTO> ingredients;
 
-    public recipeDTO(int recipeId, Date date, String recipeName, boolean isInUse){
-
+    public RecipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
         this.recipeId = recipeId;
         this.date = date;
         this.recipeName = recipeName;
         this.isInUse = isInUse;
     }
+
+    public RecipeDTO () {};
 
     @Override
     public int getRecipeId() {
@@ -43,7 +46,7 @@ public class recipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void getRecipeName(String recipeName) {
+    public void setRecipeName(String recipeName) {
     this.recipeName = recipeName;
     }
 
@@ -55,5 +58,15 @@ public class recipeDTO implements IRecipeDTO {
     @Override
     public void setIsRecipeInUse(boolean inUse) {
     this.isInUse = inUse;
+    }
+
+    @Override
+    public List<IIngredientDTO> getIngredients() {
+        return ingredients;
+    }
+
+    @Override
+    public void setIngredients(List<IIngredientDTO> ingredients) {
+        this.ingredients = ingredients;
     }
 }

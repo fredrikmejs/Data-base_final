@@ -1,20 +1,25 @@
 package Technical_Services;
 
-public class comodityBatchDTO implements IComodityBatchDTO {
+import java.sql.Date;
+
+public class CommodityBatchDTO implements ICommodityBatchDTO {
 
     private int	comBatchId;
     private int comId;
-    private float amount;
+    private String comName;
+    private double amount;
     private boolean isRest;
+    private Date date;
 
 
-    public comodityBatchDTO(int comBatchId, int comId, float amount, boolean isRest){
+    public CommodityBatchDTO(int comBatchId, int comId, String comName, double amount, Date date, boolean isRest){
 
         this.comBatchId = comBatchId;
         this.comId = comId;
+        this.comName = comName;
         this.amount = amount;
         this.isRest = isRest;
-
+        this.date = date;
 
     }
 
@@ -39,12 +44,22 @@ public class comodityBatchDTO implements IComodityBatchDTO {
     }
 
     @Override
-    public float getAmount() {
+    public String getComName() {
+        return comName;
+    }
+
+    @Override
+    public void setComName(String comName) {
+        this.comName = comName;
+    }
+
+    @Override
+    public double getAmount() {
         return amount;
     }
 
     @Override
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
     this.amount = amount;
     }
 
@@ -57,4 +72,15 @@ public class comodityBatchDTO implements IComodityBatchDTO {
     public void setRest(boolean rest) {
     this.isRest = rest;
     }
+
+    @Override
+    public Date getCommodityBatchDate(){ return date;}
+
+    @Override
+    public void setCommodityBatchDate(Date commodityBatchDate){
+        this.date = commodityBatchDate;
+}
+
+
+
 }

@@ -1,6 +1,6 @@
 package Technical_Services;
 
-import java.util.Date;
+import java.sql.Date;
 
 public interface IProductionBatchDTO {
 
@@ -16,5 +16,6 @@ public interface IProductionBatchDTO {
     Date getDate();
     void setDate(Date date);
 
-
+    String getRecipeName();
+    void setRecipeName(String recipeName);
 }

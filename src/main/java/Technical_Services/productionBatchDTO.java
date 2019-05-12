@@ -1,18 +1,20 @@
 package Technical_Services;
 
-import java.util.Date;
+import java.sql.Date;
 
-public class productionBatchDTO implements IProductionBatchDTO {
+public class ProductionBatchDTO implements IProductionBatchDTO {
 
     private int	prodBatchId;
     private int recipeId;
+    private String recipeName;
     private int batchSize;
     private Date prodBatchDate;
 
-    public productionBatchDTO(int prodBatchId, int recipeId, int batchSize, Date prodBatchDate){
+    public ProductionBatchDTO(int prodBatchId, int recipeId, String recipeName, int batchSize, Date prodBatchDate){
 
         this.prodBatchId = prodBatchId;
         this.recipeId = recipeId;
+        this.recipeName = recipeName;
         this.batchSize = batchSize;
         this.prodBatchDate = prodBatchDate;
 
@@ -56,5 +58,15 @@ public class productionBatchDTO implements IProductionBatchDTO {
     @Override
     public void setDate(Date date) {
     this.prodBatchDate = date;
+    }
+
+    @Override
+    public String getRecipeName() {
+        return recipeName;
+    }
+
+    @Override
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
     }
 }
