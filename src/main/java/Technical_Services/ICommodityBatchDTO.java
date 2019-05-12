@@ -13,8 +13,8 @@ public interface ICommodityBatchDTO {
     String getComName();
     void setComName(String comName);
 
-    float getAmount();
-    void setAmount(float amount);
+    double getAmount();
+    void setAmount(double amount);
 
     Boolean getRest();
     void setRest(boolean rest);

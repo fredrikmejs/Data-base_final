@@ -7,12 +7,12 @@ public class CommodityBatchDTO implements ICommodityBatchDTO {
     private int	comBatchId;
     private int comId;
     private String comName;
-    private float amount;
+    private double amount;
     private boolean isRest;
     private Date date;
 
 
-    public CommodityBatchDTO(int comBatchId, int comId, String comName, float amount, Date date, boolean isRest){
+    public CommodityBatchDTO(int comBatchId, int comId, String comName, double amount, Date date, boolean isRest){
 
         this.comBatchId = comBatchId;
         this.comId = comId;
@@ -54,12 +54,12 @@ public class CommodityBatchDTO implements ICommodityBatchDTO {
     }
 
     @Override
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
     @Override
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
     this.amount = amount;
     }
 

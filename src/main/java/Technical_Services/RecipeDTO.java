@@ -12,12 +12,13 @@ public class RecipeDTO implements IRecipeDTO {
     private List<IIngredientDTO> ingredients;
 
     public RecipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
-
         this.recipeId = recipeId;
         this.date = date;
         this.recipeName = recipeName;
         this.isInUse = isInUse;
     }
+
+    public RecipeDTO () {};
 
     @Override
     public int getRecipeId() {

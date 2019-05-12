@@ -3,19 +3,28 @@ package Technical_Services;
 
 public class UserDTO implements IUserDTO {
 
-        private int	userId;
-        private String userName;
-        private String password;
-        private String role;
-        private boolean isAdmin;
+    private int userId;
+    private String userName;
+    private String password;
+    private String role;
+    private boolean isAdmin;
 
-        public UserDTO(String userName, String password, String role, boolean isAdmin) {
-            this.userName = userName;
-            this.password = password;
-            this.isAdmin = isAdmin;
-            this.role = role;
+    public UserDTO(String userName, String password, String role, boolean isAdmin) {
+        this.userName = userName;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.role = role;
 
-        }
+    }
+
+    public UserDTO(int id, String userName, String password, String role, boolean isAdmin) {
+        userId = id;
+        this.userName = userName;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.role = role;
+
+    }
 
     @Override
     public int getUserId() {
@@ -34,7 +43,7 @@ public class UserDTO implements IUserDTO {
 
     @Override
     public void setUsername(String username) {
-    this.userName = username;
+        this.userName = username;
     }
 
     @Override
@@ -44,7 +53,7 @@ public class UserDTO implements IUserDTO {
 
     @Override
     public void setPassword(String password) {
-    this.password = password;
+        this.password = password;
     }
 
     @Override
@@ -54,7 +63,7 @@ public class UserDTO implements IUserDTO {
 
     @Override
     public void setRole(String role) {
-    this.role = role;
+        this.role = role;
     }
 
     @Override
@@ -64,6 +73,6 @@ public class UserDTO implements IUserDTO {
 
     @Override
     public void setAdmin(boolean isAdmin) {
-    this.isAdmin = isAdmin;
+        this.isAdmin = isAdmin;
     }
 }

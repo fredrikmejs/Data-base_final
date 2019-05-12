@@ -3,13 +3,12 @@ package Backend;
 import Technical_Services.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Backend implements IDal {
 
     private static Connection con;
-
-    public Backend() throws SQLException {
-    }
 
     public void createConnection() throws SQLException {
         con = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/chbu?"
@@ -20,9 +19,10 @@ public class Backend implements IDal {
     }
 
 
-    //User
+    //########    User    ########
     @Override
     public boolean addUser(IUserDTO user) throws SQLException {
+        createConnection();
         con.setAutoCommit(true);
         String query = "INSERT INTO user(id_user, userName, " +
                 "userPass, jobTitle, isAdmin) " +
@@ -34,10 +34,12 @@ public class Backend implements IDal {
         psQuery.setString(4, user.getRole());
         psQuery.setBoolean(5, user.isAdmin());
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
     @Override
-    public UserDTO readUser(int id) throws SQLException {
+    public IUserDTO readUser(int id) throws SQLException {
+        createConnection();
         con.setAutoCommit(true);
         String query = "SELECT * Where user_id = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
@@ -45,43 +47,67 @@ public class Backend implements IDal {
 
         ResultSet r = psQuery.executeQuery();
         r.next();
+        closeConnection();
         return new UserDTO(r.getString("username"), r.getString("password"),
                 r.getString("job_title"), r.getBoolean("is_in_use"));
     }
 
     @Override
     public boolean updateUser(IUserDTO user) throws SQLException {
+        createConnection();
         con.setAutoCommit(true);
-        String query = "UPDATE user" +
-                "SET userName = ?, userPass = ?, jobTitle = ?," +
-                " isAdmin = ? " + "WHERE id_user = ?";
+        String query = "UPDATE user " +
+                "SET userName = ?, userPass = ?, jobTitle = ?, isAdmin = ? " +
+                "WHERE id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setString(1, user.getUsername());
         psQuery.setString(2, user.getPassword());
         psQuery.setString(3, user.getRole());
         psQuery.setBoolean(4, user.isAdmin());
         psQuery.setInt(5, user.getUserId());
-
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
     @Override
     public boolean deleteUser(int id) throws SQLException {
-        con.setAutoCommit(true);
         String query = "DELETE FROM user " +
                 "WHERE id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
+    @Override
+    public List<IUserDTO> getUserList() throws SQLException {
+        createConnection();
+        String query = "SELECT * FROM user ORDER BY id_user";
+        PreparedStatement statement = con.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
 
-    //Recipe
+        List<IUserDTO> list = new ArrayList<IUserDTO>();
+        while (rs.next()) {
+            list.add(new UserDTO(
+                    rs.getInt("id_user"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("job_title"),
+                    rs.getBoolean("admin")
+            ));
+        }
+        closeConnection();
+        return list;
+    }
+
+
+    //#########    Recipe     #########
 
     @Override
     public boolean addRecipe(IRecipeDTO recipe) throws SQLException {
+        createConnection();
         try {
             con.setAutoCommit(false); //starts a transaction
             boolean success;
@@ -105,7 +131,7 @@ public class Backend implements IDal {
             PreparedStatement prepStatement2 = con.prepareStatement(query2);
             for (IIngredientDTO i : recipe.getIngredients()) {
                 prepStatement2.setInt(1, recipe.getRecipeId());
-                prepStatement2.setInt(2, i.getComodityId());
+                prepStatement2.setInt(2, i.getCommodityId());
                 prepStatement2.setDouble(3, i.getAmount());
                 prepStatement2.setDate(4, recipe.getRecipeDate());
                 success = prepStatement2.execute();
@@ -114,53 +140,112 @@ public class Backend implements IDal {
             }
             prepStatement2.close();
             con.commit();
+            con.close();
             return true;
         } catch (SQLException e) {
             con.rollback();
+            con.close();
             return false;
         }
     }
 
     @Override
-    public RecipeDTO readRecipe(int id) throws SQLException {
-        //TODO figure out how to write this query
-        String query = "SELECT id_recipe, recipeName, date, is_in_use, id_com, name, amount FROM recipe JOIN   Where recipe_id = ?";
+    public IRecipeDTO readCurrentRecipe(int id) throws SQLException {
+        createConnection();
+        String query = "SELECT * FROM get_all_recipes WHERE id_recipe = ? AND is_in_use = TRUE";
         PreparedStatement psQuery = con.prepareStatement(query);
-        psQuery.setInt(1,id);
+        psQuery.setInt(1, id);
+        ResultSet rs = psQuery.executeQuery();
+        rs.next();
+
+        IRecipeDTO recipe = new RecipeDTO(
+                rs.getInt("id_recipe"),
+                rs.getString("name"),
+                rs.getDate("time_stamp"),
+                rs.getBoolean("is_in_use")
+        );
+        List<IIngredientDTO> ingredients = new ArrayList<IIngredientDTO>();
+        ingredients.add(new IngredientDTO(
+                rs.getString("commodity"),
+                rs.getInt("id_com"),
+                rs.getDouble("amount")
+        ));
+        while (rs.next()) {
+            ingredients.add(new IngredientDTO(
+                    rs.getString("commodity"),
+                    rs.getInt("id_com"),
+                    rs.getDouble("amount")
+            ));
+        }
+        recipe.setIngredients(ingredients);
+        closeConnection();
+        return recipe;
     }
 
     @Override
     public boolean updateRecipe(IRecipeDTO recipe) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "UPDATE recipe" +
-                "SET recipeName = ?, recipedate = ?," +
-                "isInUse= ? " +
-                "WHERE id_recipe = ?";
-        PreparedStatement psQuery = con.prepareStatement(query);
-        psQuery.setString(1, recipe.getRecipeName());
-        //TODO setobject?
-        psQuery.setObject(2, recipe.getRecipeDate());
-        psQuery.setBoolean(3, recipe.getIsRecipeInUse());
-        psQuery.setInt(4, recipe.getRecipeId());
-        boolean success = psQuery.execute();
-        return success;
+        createConnection();
+        try {
+            con.setAutoCommit(false);
+
+            //set the previous version to not in use
+            String query = "UPDATE recipe SET is_in_use = FALSE WHERE id_recipe = ? AND is_in_use = TRUE";
+            PreparedStatement prepStat = con.prepareStatement(query);
+            prepStat.setInt(1, recipe.getRecipeId());
+            if (!prepStat.execute()) throw new SQLException();
+
+            //Add the new recipe
+            if (!addRecipe(recipe)) throw new SQLException();
+
+            con.commit();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+            con.rollback();
+            con.close();
+            return false;
+        }
     }
 
     @Override
-    public boolean deleteRecipe(int id) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "DELETE FROM recipe " +
-                "WHERE id_recipe = ?";
-        PreparedStatement psQuery = con.prepareStatement(query);
-        psQuery.setInt(1, id);
-        boolean success = psQuery.execute();
-        return success;
+    public boolean deleteRecipe(int id, Date timestamp) throws SQLException {
+        createConnection();
+        try {
+            con.setAutoCommit(false);
+
+            //Delete all ingredients from the recipe
+            String query = "DELETE FROM ingredient WHERE id_recipe = ? AND time_stamp = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setDate(2, timestamp);
+            if (!preparedStatement.execute()) throw new SQLException();
+
+            //Delete the recipe it self
+            String query1 = "DELETE FROM recipe WHERE id_recipe = ? AND time_stamp = ?";
+            PreparedStatement preparedStatement1 = con.prepareStatement(query1);
+            preparedStatement1.setInt(1, id);
+            preparedStatement1.setDate(2, timestamp);
+            if (!preparedStatement1.execute()) throw new SQLException();
+
+            con.commit();
+            con.close();
+            return true;
+
+        } catch (SQLException e) {
+            con.rollback();
+            con.close();
+            return false;
+        }
     }
 
 
-    //Production Batch
+
+
+    //###########    Production Batch    #############
+
     @Override
     public boolean addProductionBatch(IProductionBatchDTO pBatch) throws SQLException {
+        createConnection();
         String query = "INSERT INTO production_batch(id_production_batch, " +
                 "id_recipe, batch_size, time_stamp) " +
                 "VALUES(?, ?, ?, ?)";
@@ -170,96 +255,130 @@ public class Backend implements IDal {
         psQuery.setInt(3, pBatch.getBatchSize());
         psQuery.setDate(4, pBatch.getDate());
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
     @Override
-    public boolean readProductionBatch(int id) throws SQLException {
-        String query ="SELECT * FROM production_batch" +
+    public IProductionBatchDTO readProductionBatch(int id) throws SQLException {
+        createConnection();
+        String query = "SELECT * FROM get_production_batch " +
                 "WHERE id_production_batch = ?";
-
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
-        boolean success = psQuery.execute();
-        return success;
+        ResultSet rs = psQuery.executeQuery();
+        rs.next();
+        IProductionBatchDTO prodBatch = new ProductionBatchDTO(
+                rs.getInt("id_production_batch"),
+                rs.getInt("id_recipe"),
+                rs.getString("recipe"),
+                rs.getInt("batch_size"),
+                rs.getDate("time_stamp")
+                );
+
+        con.close();
+        return prodBatch;
     }
 
     @Override
     public boolean updateProductionBatch(IProductionBatchDTO pBatch) throws SQLException {
-        String query = "UPDATE production_batch" +
-                "SET batch_size = ?, time_stamp = ?," +
+        createConnection();
+        String query = "UPDATE production_batch " +
+                "SET batch_size = ?, time_stamp = ?, " +
                 "WHERE id_production_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, pBatch.getBatchSize());
         psQuery.setDate(2, pBatch.getDate());
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
     @Override
     public boolean deleteProductionBatch(int id) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "DELETE FROM productionBatch" +
+        createConnection();
+        String query = "DELETE FROM productionBatch " +
                 "WHERE id_production_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
 
-    //Commodity Batch
+
+
+
+    //##########   Commodity Batch   ###########
+
     @Override
     public boolean addCommodityBatch(ICommodityBatchDTO cBatch) throws SQLException {
-        String query = "INSERT INTO commodity_batch(id_com_batch, id_com," +
-                "amount, isRest, time_stamp) " +
+        createConnection();
+        String query = "INSERT INTO commodity_batch" +
+                "(id_com_batch, id_com, amount, isRest, time_stamp) " +
                 "VALUES(?, ?, ?, ?,?)";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, cBatch.getIdComBatch());
         psQuery.setInt(2, cBatch.getIdCom());
-        psQuery.setFloat(3, cBatch.getAmount());
+        psQuery.setDouble(3, cBatch.getAmount());
         psQuery.setBoolean(4, cBatch.getRest());
         psQuery.setDate(5,cBatch.getCommodityBatchDate());
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
     @Override
-    public boolean readCommodityBatch(int id) throws SQLException {
-        String query ="SELECT * FROM commodity_batch" +
+    public ICommodityBatchDTO readCommodityBatch(int id) throws SQLException {
+        createConnection();
+        String query ="SELECT * FROM commodity_batch " +
                 "WHERE id_com_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
-        boolean success = psQuery.execute();
-        return success;
+        ResultSet rs = psQuery.executeQuery();
+        ICommodityBatchDTO batch = new CommodityBatchDTO(
+                rs.getInt("id_com_batch"),
+                rs.getInt("id_com"),
+                rs.getString("name"),
+                rs.getDouble("amount"),
+                rs.getDate("time_stamp"),
+                rs.getBoolean("is_rest")
+                );
+
+        closeConnection();
+        return batch;
+
     }
 
     @Override
     public boolean updateCommodityBatch(ICommodityBatchDTO cBatch) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "UPDATE commodity_batch" +
-                "SET amount = ?, isRest= ?," +
+        createConnection();
+        String query = "UPDATE commodity_batch " +
+                "SET amount = ?, isRest= ?, " +
                 "time_stamp= ? " +
                 "WHERE id_com_batch = ?";
 
         PreparedStatement psQuery = con.prepareStatement(query);
 
-        psQuery.setFloat(1,cBatch.getAmount());
+        psQuery.setDouble(1,cBatch.getAmount());
         psQuery.setBoolean(2, cBatch.getRest());
         psQuery.setDate(3, cBatch.getCommodityBatchDate());
         psQuery.setInt(4, cBatch.getIdComBatch());
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 
     @Override
     public boolean deleteCommodityBatch(int id) throws SQLException {
-        //TODO Maybe change to Query
-        String query = "DELETE FROM commodityBatch" +
+        createConnection();
+        String query = "DELETE FROM commodityBatch " +
                 "WHERE id_recipe = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
         boolean success = psQuery.execute();
+        closeConnection();
         return success;
     }
 }
