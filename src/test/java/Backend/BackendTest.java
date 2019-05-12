@@ -52,7 +52,7 @@ class BackendTest {
         System.out.println("\n-----------------------------------------");
 
         //delete
-        dal.deleteUser(1);
+        dal.deleteUser(0);
     }
 
 
@@ -100,7 +100,7 @@ class BackendTest {
     void productionBatch() throws SQLException {
         //add
         Backend dal = new Backend();
-        IProductionBatchDTO batchOut = new ProductionBatchDTO(10, 1, "not the name", 200, new Date(2019, 5, 12));
+        IProductionBatchDTO batchOut = new productionBatchDTO(10, 1, "not the name", 200, new Date(2019, 5, 12));
         dal.addProductionBatch(batchOut);
 
         //read
@@ -110,7 +110,7 @@ class BackendTest {
         System.out.println("\n-----------------------------------------");
 
         //update
-        IProductionBatchDTO batchUpdate = new ProductionBatchDTO(10, 1, "not the name", 250, new Date(2019, 5, 12));
+        IProductionBatchDTO batchUpdate = new productionBatchDTO(10, 1, "not the name", 250, new Date(2019, 5, 12));
         dal.updateProductionBatch(batchUpdate);
 
         //delete

@@ -2,7 +2,7 @@ package Technical_Services;
 
 import java.sql.Date;
 
-public class ProductionBatchDTO implements IProductionBatchDTO {
+public class productionBatchDTO implements IProductionBatchDTO {
 
     private int	prodBatchId;
     private int recipeId;
@@ -10,7 +10,7 @@ public class ProductionBatchDTO implements IProductionBatchDTO {
     private int batchSize;
     private Date prodBatchDate;
 
-    public ProductionBatchDTO(int prodBatchId, int recipeId, String recipeName, int batchSize, Date prodBatchDate){
+    public productionBatchDTO(int prodBatchId, int recipeId, String recipeName, int batchSize, Date prodBatchDate){
 
         this.prodBatchId = prodBatchId;
         this.recipeId = recipeId;

@@ -269,7 +269,7 @@ public class Backend implements IDal {
         psQuery.setInt(1, id);
         ResultSet rs = psQuery.executeQuery();
         rs.next();
-        IProductionBatchDTO prodBatch = new ProductionBatchDTO(
+        IProductionBatchDTO prodBatch = new productionBatchDTO(
                 rs.getInt("id_production_batch"),
                 rs.getInt("id_recipe"),
                 rs.getString("recipe"),
