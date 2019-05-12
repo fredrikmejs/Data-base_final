@@ -73,6 +73,7 @@ public class Backend implements IDal {
 
     @Override
     public boolean deleteUser(int id) throws SQLException {
+        createConnection();
         String query = "DELETE FROM user " +
                 "WHERE id_user = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
@@ -114,20 +115,20 @@ public class Backend implements IDal {
             boolean success;
 
             //set the recipe
-i            String query1 = "INSERT INTO recipe(id_recipe, name, " +
-                    "date, is_in_use ) " +
+            String query1 = "INSERT INTO recipe(id_recipe, name, " +
+                    "time_stamp, is_in_use ) " +
                     "VALUES(?, ?, ?, ?)";
             PreparedStatement prepStatement1 = con.prepareStatement(query1);
             prepStatement1.setInt(1, recipe.getRecipeId());
             prepStatement1.setString(2, recipe.getRecipeName());
             prepStatement1.setObject(3, recipe.getRecipeDate());
             prepStatement1.setBoolean(4, recipe.getIsRecipeInUse());
-            success = prepStatement1.execute();
+            prepStatement1.execute();
             prepStatement1.close();
-            if (!success) throw new SQLException();
+
 
             //set all the ingredients
-            String query2 = "INSERT INTO ingredient(id_recipe, id_com, amount, timestamp) " +
+            String query2 = "INSERT INTO ingredient(id_recipe, id_com, amount, time_stamp) " +
                     "VALUES(?, ?, ?, ?)";
             PreparedStatement prepStatement2 = con.prepareStatement(query2);
             for (IIngredientDTO i : recipe.getIngredients()) {
@@ -135,16 +136,15 @@ i            String query1 = "INSERT INTO recipe(id_recipe, name, " +
                 prepStatement2.setInt(2, i.getCommodityId());
                 prepStatement2.setDouble(3, i.getAmount());
                 prepStatement2.setDate(4, recipe.getRecipeDate());
-                success = prepStatement2.execute();
+                prepStatement2.execute();
                 prepStatement2.clearParameters();
-                if (!success) throw new SQLException();
             }
             prepStatement2.close();
-            con.commit();
+            con.commit(); //end transaction by comiting
             con.close();
             return true;
         } catch (SQLException e) {
-            con.rollback();
+            con.rollback(); //end transaction by rolling back changes
             con.close();
             return false;
         }
@@ -334,7 +334,7 @@ i            String query1 = "INSERT INTO recipe(id_recipe, name, " +
     @Override
     public ICommodityBatchDTO readCommodityBatch(int id) throws SQLException {
         createConnection();
-        String query ="SELECT * FROM commodity_batch " +
+        String query ="SELECT * FROM get_commodity_batches " +
                 "WHERE id_com_batch = ?";
         PreparedStatement psQuery = con.prepareStatement(query);
         psQuery.setInt(1, id);
@@ -346,7 +346,7 @@ i            String query1 = "INSERT INTO recipe(id_recipe, name, " +
                 rs.getString("name"),
                 rs.getDouble("amount"),
                 rs.getDate("time_stamp"),
-                rs.getBoolean("is_rest")
+                rs.getBoolean("is_remainder")
                 );
 
         closeConnection();

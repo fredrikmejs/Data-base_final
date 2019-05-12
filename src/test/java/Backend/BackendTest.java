@@ -16,50 +16,42 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.DEFAULT)
 class BackendTest {
 
+
+    @Test
+    void connection() throws SQLException {
+        Backend dal = new Backend();
+        dal.createConnection();
+        dal.closeConnection();
+    }
+
+
     //#########   user    ##########
 
     @Test
-    void createConnection() throws SQLException {
+    void user() throws SQLException {
+        //add
         Backend dal = new Backend();
-        dal.createConnection();
-    }
+        UserDTO uOut = new UserDTO("Dumbledoor", "Lemon Drop", "Produktionsleder", true);
+        dal.addUser(uOut);
 
-    @Test
-    void addUser() throws SQLException {
-        Backend dal = new Backend();
-        UserDTO u = new UserDTO("Dumbledoor", "Lemon Drop", "Produktionsleder", true);
-        dal.addUser(u);
-    }
-
-    @Test
-    void readUser() throws SQLException {
-        Backend dal = new Backend();
-        IUserDTO u = dal.readUser(0);
-        System.out.println(u.getUserId() + "\t" + u.getUsername() + "\t" + u.getPassword() + u.getRole() + "\t" + u.isAdmin());
+        //read
+        IUserDTO uIn = dal.readUser(0);
+        System.out.println(uIn.getUserId() + "\t" + uIn.getUsername() + "\t" + uIn.getPassword() + "\t" + uIn.getRole() + "\t" + uIn.isAdmin());
         System.out.println("\n-----------------------------------------");
-    }
 
-    @Test
-    void updateUser() throws SQLException {
-        Backend dal = new Backend();
-        UserDTO u = new UserDTO(0,"Dumbledoor", "Sherbet Lemon", "Produktionsleder", true);
-        dal.updateUser(u);
-    }
+        //update
+        UserDTO uUpdate = new UserDTO(0,"Dumbledoor", "Sherbet Lemon", "Produktionsleder", true);
+        dal.updateUser(uUpdate);
 
-    @Test
-    void getUserList() throws SQLException {
-        Backend dal = new Backend();
+        //list
         List<IUserDTO> list = dal.getUserList();
 
         for (IUserDTO u : list) {
             System.out.println(u.getUserId() + "\t" + u.getUsername() + "\t" + u.getPassword() + u.getRole() + "\t" + u.isAdmin());
         }
         System.out.println("\n-----------------------------------------");
-    }
 
-    @Test
-    void deleteUser() throws SQLException {
-        Backend dal = new Backend();
+        //delete
         dal.deleteUser(1);
     }
 
@@ -69,58 +61,34 @@ class BackendTest {
 
 
     @Test
-    void addRecipe() throws SQLException {
+    void recipe() throws SQLException {
+        //add
         Backend dal = new Backend();
-        RecipeDTO r = new RecipeDTO(10, "Minor potion of flight", new Date(2019, 5, 10), true);
+        RecipeDTO rOut = new RecipeDTO(10, "Minor potion of flight", new Date(2019, 5, 10), true);
         List<IIngredientDTO> l = new ArrayList<IIngredientDTO>();
         l.add(new IngredientDTO("this is not the name", 3, 5));
         l.add(new IngredientDTO("", 5, 10));
-        r.setIngredients(l);
-        dal.addRecipe(r);
-    }
+        rOut.setIngredients(l);
+        dal.addRecipe(rOut);
 
-    @Test
-    void readCurrentRecipe() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addRecipe();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        IRecipeDTO r = dal.readCurrentRecipe(10);
-        System.out.println(r.getRecipeId() + "\t" + r.getRecipeName() + "\t" + r.getRecipeDate() + "\n" + r.getIsRecipeInUse());
-        for (IIngredientDTO i : r.getIngredients()) {
+        //read
+        IRecipeDTO rIn = dal.readCurrentRecipe(10);
+        System.out.println(rIn.getRecipeId() + "\t" + rIn.getRecipeName() + "\t" + rIn.getRecipeDate() + "\n" + rIn.getIsRecipeInUse());
+        for (IIngredientDTO i : rIn.getIngredients()) {
             System.out.println("\t" + i.getCommodityId() + "\t" + i.getName() + "\t" + i.getAmount());
         }
         System.out.println("\n-----------------------------------------");
 
-    }
 
-    @Test
-    void updateRecipe() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addRecipe();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        //update
+        RecipeDTO rUpdate = new RecipeDTO(10, "Minor potion of flight", new Date(2019, 5, 12), true);
+        List<IIngredientDTO> l2 = new ArrayList<IIngredientDTO>();
+        l2.add(new IngredientDTO("this is not the name", 3, 5));
+        l2.add(new IngredientDTO("", 5, 10));
+        rUpdate.setIngredients(l2);
+        dal.updateRecipe(rUpdate);
 
-        RecipeDTO r = new RecipeDTO(10, "Minor potion of flight", new Date(2019, 5, 12), true);
-        List<IIngredientDTO> l = new ArrayList<IIngredientDTO>();
-        l.add(new IngredientDTO("this is not the name", 3, 5));
-        l.add(new IngredientDTO("", 5, 10));
-        r.setIngredients(l);
-        dal.updateRecipe(r);
-    }
-
-    @Test
-    void deleteRecipe() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addRecipe();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        //delete
         dal.deleteRecipe(10, new Date(2019, 5, 10));
         dal.deleteRecipe(10, new Date(2019, 5, 12));
     }
@@ -129,46 +97,23 @@ class BackendTest {
     //#########   production batch    ##########
 
     @Test
-    void addProductionBatch() throws SQLException {
+    void productionBatch() throws SQLException {
+        //add
         Backend dal = new Backend();
-        IProductionBatchDTO batch = new ProductionBatchDTO(10, 1, "not the name", 200, new Date(2019, 5, 12));
-        dal.addProductionBatch(batch);
-    }
+        IProductionBatchDTO batchOut = new ProductionBatchDTO(10, 1, "not the name", 200, new Date(2019, 5, 12));
+        dal.addProductionBatch(batchOut);
 
-    @Test
-    void readProductionBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addProductionBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        IProductionBatchDTO batch = dal.readProductionBatch(10);
+        //read
+        IProductionBatchDTO batchIn = dal.readProductionBatch(10);
 
-        System.out.println(batch.getIdProdBatch() + "\t" + batch.getIdRec() + "\t" + batch.getRecipeName() + "\t" + batch.getBatchSize() + "\t" +batch.getDate());
+        System.out.println(batchIn.getIdProdBatch() + "\t" + batchIn.getIdRec() + "\t" + batchIn.getRecipeName() + "\t" + batchIn.getBatchSize() + "\t" +batchIn.getDate());
         System.out.println("\n-----------------------------------------");
-    }
 
-    @Test
-    void updateProductionBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addProductionBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        IProductionBatchDTO batch = new ProductionBatchDTO(10, 1, "not the name", 250, new Date(2019, 5, 12));
-        dal.updateProductionBatch(batch);
-    }
+        //update
+        IProductionBatchDTO batchUpdate = new ProductionBatchDTO(10, 1, "not the name", 250, new Date(2019, 5, 12));
+        dal.updateProductionBatch(batchUpdate);
 
-    @Test
-    void deleteProductionBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addProductionBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        //delete
         dal.deleteProductionBatch(10);
     }
 
@@ -178,45 +123,22 @@ class BackendTest {
 
 
     @Test
-    void addCommodityBatch() throws SQLException {
+    void commodityBatch() throws SQLException {
+        //add
         Backend dal = new Backend();
-        ICommodityBatchDTO batch = new CommodityBatchDTO(10, 1, "", 100, new Date(2019, 5, 12), false);
-        dal.addCommodityBatch(batch);
-    }
+        ICommodityBatchDTO batchOut = new CommodityBatchDTO(10, 1, "", 100, new Date(2019, 5, 12), false);
+        dal.addCommodityBatch(batchOut);
 
-    @Test
-    void readCommodityBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addCommodityBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        ICommodityBatchDTO batch = dal.readCommodityBatch(10);
-        System.out.println(batch.getIdComBatch() + "\t" + batch.getIdCom() + "\t" + batch.getComName() + "\t" + batch.getAmount() + "\t" + batch.getCommodityBatchDate() + "\t" + batch.getRest());
+        //read
+        ICommodityBatchDTO batchIn = dal.readCommodityBatch(10);
+        System.out.println(batchIn.getIdComBatch() + "\t" + batchIn.getIdCom() + "\t" + batchIn.getComName() + "\t" + batchIn.getAmount() + "\t" + batchIn.getCommodityBatchDate() + "\t" + batchIn.getRest());
         System.out.println("\n-----------------------------------------");
-    }
 
-    @Test
-    void updateCommodityBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addCommodityBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        ICommodityBatchDTO batch = new CommodityBatchDTO(10, 1, "", 200, new Date(2019, 5, 12), false);
-        dal.updateCommodityBatch(batch);
-    }
+        //update
+        ICommodityBatchDTO batchUpdate = new CommodityBatchDTO(10, 1, "", 200, new Date(2019, 5, 12), false);
+        dal.updateCommodityBatch(batchUpdate);
 
-    @Test
-    void deleteCommodityBatch() throws SQLException {
-        Backend dal = new Backend();
-        try {
-            addCommodityBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        //delete
         dal.deleteCommodityBatch(10);
     }
 }
