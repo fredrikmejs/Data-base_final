@@ -13,7 +13,7 @@ public interface IRecipeDTO {
 
 
      String getRecipeName();
-     void getRecipeName(String RecipeName);
+     void setRecipeName(String recipeName);
 
      boolean getIsRecipeInUse();
      void setIsRecipeInUse(boolean recipeInUse);

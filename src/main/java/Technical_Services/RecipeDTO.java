@@ -1,7 +1,7 @@
 package Technical_Services;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeDTO implements IRecipeDTO {
 
@@ -9,6 +9,7 @@ public class RecipeDTO implements IRecipeDTO {
     private Date date;
     private String recipeName;
     private boolean isInUse;
+    private List<IIngredientDTO> ingredients;
 
     public RecipeDTO(int recipeId, String recipeName, Date date, boolean isInUse){
 
@@ -44,7 +45,7 @@ public class RecipeDTO implements IRecipeDTO {
     }
 
     @Override
-    public void getRecipeName(String recipeName) {
+    public void setRecipeName(String recipeName) {
     this.recipeName = recipeName;
     }
 
@@ -56,5 +57,15 @@ public class RecipeDTO implements IRecipeDTO {
     @Override
     public void setIsRecipeInUse(boolean inUse) {
     this.isInUse = inUse;
+    }
+
+    @Override
+    public List<IIngredientDTO> getIngredients() {
+        return ingredients;
+    }
+
+    @Override
+    public void setIngredients(List<IIngredientDTO> ingredients) {
+        this.ingredients = ingredients;
     }
 }

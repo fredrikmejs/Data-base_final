@@ -10,6 +10,9 @@ public interface ICommodityBatchDTO {
     int getIdCom();
     void setIdCom(int idCom);
 
+    String getComName();
+    void setComName(String comName);
+
     float getAmount();
     void setAmount(float amount);
 

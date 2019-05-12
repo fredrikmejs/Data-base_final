@@ -16,5 +16,6 @@ public interface IProductionBatchDTO {
     Date getDate();
     void setDate(Date date);
 
-
+    String getRecipeName();
+    void setRecipeName(String recipeName);
 }
